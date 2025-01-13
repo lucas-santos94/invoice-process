@@ -1,0 +1,46 @@
+version: "3.9"
+services:
+    invoice-process:
+        build:
+            context: .
+            dockerfile: ./Dockerfile
+        container_name: invoice-process
+        volumes:
+            - ./:/var/www/app
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        expose:
+            - "9000"
+        depends_on:
+            - postgres
+            - redis
+            
+    nginx:
+        image: nginx:latest
+        container_name: invoice-process-nginx
+        ports:
+            - "8080:80"
+        volumes:
+            - ./:/var/www/app
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - invoice-process
+
+    postgres:
+        image: postgres:15
+        container_name: invoice-process-postgres
+        environment:
+            POSTGRES_USER: invoice_process
+            POSTGRES_PASSWORD: invoice_process
+            POSTGRES_DB: invoice_process
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        ports:
+            - "5432:5432"
+    redis:
+        image: redis:latest
+        container_name: redis
+        ports:
+            - "6379:6379"
+
+volumes:
+    postgres-data:

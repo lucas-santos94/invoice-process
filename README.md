@@ -100,3 +100,13 @@ Para processar uma fatura, você pode usar o seguinte comando `curl` para enviar
 curl --location 'http://127.0.0.1:8080/api/invoice/process' \
 --header 'Content-Type: application/json' \
 --form 'file=@"/path/file/invoices.csv"'
+```
+
+## Testes
+
+Este projeto utiliza o Pest para testes automatizados. Para rodar os testes, siga os passos abaixo:
+
+### Rodando os testes com Pest
+
+```bash
+php artisan test
